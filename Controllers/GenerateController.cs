@@ -19,14 +19,14 @@ namespace password_generator_api.Controllers
 
       // GET: api/<GenerateController>
       [HttpGet]
-      public ActionResult Get()
+      public ActionResult Get([FromQuery] int length, [FromQuery] bool isUpperCase, [FromQuery] bool isLowerCase, [FromQuery] bool isNumeric, [FromQuery] bool isSpecial)
       {
          try
          {
             object ob = new
             {
                Message = "Success",
-               Password = generatePassword(20)
+               Password = generatePassword(length, isUpperCase, isLowerCase, isNumeric, isSpecial)
             };
             return Ok(ob);
          } catch(Exception ex)
@@ -48,24 +48,13 @@ namespace password_generator_api.Controllers
       {
       }
 
-      // PUT api/<GenerateController>/5
-      [HttpPut("{id}")]
-      public void Put(int id, [FromBody] string value)
-      {
-      }
-
-      // DELETE api/<GenerateController>/5
-      [HttpDelete("{id}")]
-      public void Delete(int id)
-      {
-      }
-
       #region Methods ----------------------------------------------------------
 
       public static int getRandomInt() => getRandom.Next(0, 10);
 
-      public static string generatePassword(int length, bool isUpperCase = false, bool isLowerCase = true, bool isNumeric = false, IEnumerable<char>? specialChars = null)
+      public static string generatePassword(int length, bool isUpperCase = false, bool isLowerCase = true, bool isNumeric = false, bool specialChars = false)
       {
+         if (length == 0) length = 20;
          StringBuilder sb = new();
          for (int i = 0; i < length; i++)
          {
