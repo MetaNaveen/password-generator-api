@@ -66,11 +66,12 @@ namespace password_generator_api.Controllers
          if (isLowerCase) conditions.Add("LOWER_CASE");
          if (isNumeric) conditions.Add("NUMERICS");
          if (isSpecialChars) conditions.Add("SPECIAL_CHARS");
+         if (conditions.Count == 0) conditions.Add("NUMERICS");
 
          StringBuilder sb = new();
          for (int i = 0; i < length; i++)
          {
-            string randomChoice = conditions[getRandom.Next(0, conditions.Count())];
+            string randomChoice = conditions.Count > 1 ? conditions[getRandom.Next(0, conditions.Count)]: conditions[0];
             switch (randomChoice)
             {
                case "NUMERICS": 
