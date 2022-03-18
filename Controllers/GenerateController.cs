@@ -14,6 +14,9 @@ namespace password_generator_api.Controllers
       #region Static members --------------------------------------------------
 
       private static readonly Random getRandom = new Random();
+      private static readonly String UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      private static readonly String LOWER_CASE = "abcdefghijklmnopqrstuvwxyz";
+      private static readonly String SPECIAL_CHARS = "!@#$%^&*()";
 
       #endregion
 
@@ -50,7 +53,10 @@ namespace password_generator_api.Controllers
 
       #region Methods ----------------------------------------------------------
 
-      public static int getRandomInt() => getRandom.Next(0, 10);
+      public static int getRandomInt(int start = 0, int end = 10) => getRandom.Next(start, end);
+      public static char getRandomUpperCase() => UPPER_CASE[getRandomInt(0, 26)];
+      public static char getRandomLowerCase() => LOWER_CASE[getRandomInt(0, 26)];
+      public static char getRandomSpecialCase() => SPECIAL_CHARS[getRandomInt(0, 10)];
 
       public static string generatePassword(int length, bool isUpperCase = false, bool isLowerCase = true, bool isNumeric = false, bool specialChars = false)
       {
@@ -58,7 +64,20 @@ namespace password_generator_api.Controllers
          StringBuilder sb = new();
          for (int i = 0; i < length; i++)
          {
-            sb.Append(getRandomInt());
+            int randomChoice = getRandom.Next(0, 4);
+            switch (randomChoice)
+            {
+               case 0: 
+                  sb.Append(getRandomInt()); break;
+               case 1:
+                  sb.Append(getRandomUpperCase()); break;
+               case 2:
+                  sb.Append(getRandomLowerCase()); break;
+               case 3:
+                  sb.Append(getRandomSpecialCase()); break;
+               default:
+                  sb.Append(getRandomInt()); break;
+            }
          }
 
          return sb.ToString();
