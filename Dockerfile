@@ -19,4 +19,5 @@ RUN dotnet publish "password-generator-api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "password-generator-api.dll"]
+#ENTRYPOINT ["dotnet", "password-generator-api.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet password-generator-api.dll
