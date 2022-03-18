@@ -58,22 +58,28 @@ namespace password_generator_api.Controllers
       public static char getRandomLowerCase() => LOWER_CASE[getRandomInt(0, 26)];
       public static char getRandomSpecialCase() => SPECIAL_CHARS[getRandomInt(0, 10)];
 
-      public static string generatePassword(int length, bool isUpperCase = false, bool isLowerCase = true, bool isNumeric = false, bool specialChars = false)
+      public static string generatePassword(int length, bool isUpperCase = false, bool isLowerCase = true, bool isNumeric = false, bool isSpecialChars = false)
       {
          if (length == 0) length = 20;
+         List<string> conditions = new();
+         if (isUpperCase) conditions.Add("UPPER_CASE");
+         if (isLowerCase) conditions.Add("LOWER_CASE");
+         if (isNumeric) conditions.Add("NUMERICS");
+         if (isSpecialChars) conditions.Add("SPECIAL_CHARS");
+
          StringBuilder sb = new();
          for (int i = 0; i < length; i++)
          {
-            int randomChoice = getRandom.Next(0, 4);
+            string randomChoice = conditions[getRandom.Next(0, conditions.Count())];
             switch (randomChoice)
             {
-               case 0: 
+               case "NUMERICS": 
                   sb.Append(getRandomInt()); break;
-               case 1:
+               case "UPPER_CASE":
                   sb.Append(getRandomUpperCase()); break;
-               case 2:
+               case "LOWER_CASE":
                   sb.Append(getRandomLowerCase()); break;
-               case 3:
+               case "SPECIAL_CHARS":
                   sb.Append(getRandomSpecialCase()); break;
                default:
                   sb.Append(getRandomInt()); break;
